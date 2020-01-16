@@ -22,6 +22,8 @@ if (document.location.hash) {
     getUserID();
     pubsub();
 } else {
+    document.getElementById('connect').setAttribute('href', document.getElementById('connect').getAttribute('href').replace('<url>', document.location.href));
+    console.log(document.location.href);
     console.info('Please login to continue.')
 }
 
