@@ -23,7 +23,7 @@ if (document.location.hash) {
     pubsub();
 } else {
     document.getElementById('connect').setAttribute('href', document.getElementById('connect').getAttribute('href').replace('<url>', document.location.href));
-    console.log(document.location.href);
+    console.debug('Document location:', document.location.href);
     console.info('Please login to continue.')
 }
 
@@ -34,8 +34,8 @@ function getUserID() {
         if (httpRequest.readyState === XMLHttpRequest.DONE) {
             if (httpRequest.status === 200) {
                 user = JSON.parse(httpRequest.response).data[0];
-                console.debug(user);
-                debug_output.append('User ID: '+ user.id +'\n');
+                console.debug('User:', user);
+                debug_output.append('User ID: '+ user.id +' ('+ user.display_name +')\n');
                 return user;
             }
         }
@@ -59,10 +59,10 @@ function pubsub() {
         switch (response.type) {
             case 'RESPONSE':
                 if (response.error) {
-                    console.error('Server returned an error:', response.error);
+                    console.error('The server returned an error:', response.error);
                     socket.close();
                 } else {
-                    console.log('Server is OK!');
+                    console.log('The server accepted the request!');
                 }
                 break;
             case 'MESSAGE':
@@ -76,7 +76,7 @@ function pubsub() {
     }
     socket.onopen = () => {
         console.time('Connection time');
-        console.log('Connected!');
+        console.log('Connected! Subscribe to the different topics...');
         socket.send(JSON.stringify({
             'type': 'LISTEN',
             'data': {
