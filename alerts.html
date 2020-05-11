@@ -13,10 +13,12 @@
             <h1>TrAsKiN Stream Alerts</h1>
             <div id="landing">
                 <p class="lead">We need your permission to get all the information from your lives!</p>
-                <p><a href="https://id.twitch.tv/oauth2/authorize?client_id=nxyyskr9bnxcy08abnfnhrmxvqtjht&redirect_uri=<url>&response_type=token&scope=whispers:read+bits:read" class="btn btn-primary" id="connect">Connect with Twitch</a></p>
+                <p><a href="https://id.twitch.tv/oauth2/authorize?client_id=<client_id>&redirect_uri=<url>&response_type=token&scope=bits:read+channel:read:redemptions+channel_subscriptions" class="btn btn-primary" id="connect">Connect with Twitch</a></p>
             </div>
             <pre class="text-muted bg-light rounded p-1 border text-left shadow"><small><code id="debug"></code></small></pre>
         </div>
+        <script src="User.js"></script>
+        <script src="PubSub.js"></script>
         <script src="app.js"></script>
     </body>
 </html>
