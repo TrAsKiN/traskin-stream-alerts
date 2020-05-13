@@ -42,7 +42,7 @@ class User {
 
     httpRequest(url) {
         return new Promise((resolve, reject) => {
-            var request = new XMLHttpRequest();
+            const request = new XMLHttpRequest();
             request.onreadystatechange = () => {
                 if (request.readyState === XMLHttpRequest.DONE) {
                     switch (request.status) {
