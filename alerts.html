@@ -6,8 +6,9 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>TrAsKiN Stream Alerts</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css">
         <link rel="icon" href="favicon.ico">
+
+        <link rel="stylesheet" href="Followers.css">
     </head>
     <body>
         <div class="container text-center">
@@ -16,8 +17,14 @@
                 <p><a href="https://id.twitch.tv/oauth2/authorize?client_id=<client_id>&redirect_uri=<url>&response_type=token&scope=bits:read+channel:read:redemptions+channel_subscriptions" class="btn btn-primary" id="connect">Connect with Twitch</a></p>
             </div>
         </div>
+        <div id="followers" class="d-none">
+            <div id="total-followers">{total_followers}</div>
+            <div id="new-follower">{new_follower}</div>
+            <div id="last-follower">{last_follower}</div>
+        </div>
         <script src="User.js"></script>
         <script src="PubSub.js"></script>
+        <script src="Followers.js"></script>
         <script src="app.js"></script>
     </body>
 </html>

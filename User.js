@@ -5,7 +5,7 @@ class User {
     name;
     token;
     clientId;
-    totalFollows;
+    totalFollowers;
     lastFollower;
 
     constructor(token, clientId) {
@@ -30,7 +30,7 @@ class User {
         return new Promise((resolve, reject) => {
             this.httpRequest('https://api.twitch.tv/helix/users/follows?first=1&to_id=' + this.id)
             .then((response) => {
-                this.totalFollows = response.total;
+                this.totalFollowers = response.total;
                 this.lastFollower = response.data[0].from_name;
                 resolve(response);
             })
@@ -51,7 +51,6 @@ class User {
                             break;
                         default:
                             reject(JSON.parse(request.response));
-                            break;
                     }
                 }
             };

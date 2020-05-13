@@ -14,11 +14,29 @@ if (window.localStorage.getItem('access_token')) {
     user.getUser()
     .then(() => {
         // Retrieving the last follower and the total number of followers
-        user.getLastFollow();
+        user.getLastFollow()
+        .then(() => {
+            const followers = new Followers(user.lastFollower, user.totalFollowers);
+            window.setInterval(() => {
+                console.log('New follow!');
+                followers.newFollow('Test_follower');
+            }, 10000);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
 
         // Creating and starting the websocket
         const pubsub = new PubSub(socket, user.token, user.id);
-        pubsub.start();
+        pubsub.start((message) => {
+            console.debug(message);
+        })
+        .then(() => {
+
+        })
+        .catch((error) => {
+
+        });
     })
     .catch((error) => {
         console.error(error);
@@ -34,7 +52,7 @@ if (window.localStorage.getItem('access_token')) {
     // Access token registration
     window.localStorage.setItem('access_token', document.location.hash.match(/access_token=(\w+)/)[1]);
 
-    // Redirection to alerts display  
+    // Redirection to alerts display
     history.replaceState({}, document.title, window.location.pathname);
     document.location.reload();
 } else {
