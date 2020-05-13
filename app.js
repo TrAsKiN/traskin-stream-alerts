@@ -2,14 +2,13 @@
 
 const socket = new WebSocket('wss://pubsub-edge.twitch.tv:443');
 const clientId = 'nxyyskr9bnxcy08abnfnhrmxvqtjht';
-const debugOutput = document.getElementById('debug');
 
-if (document.location.hash) {
+if (window.localStorage.getItem('access_token')) {
     // Hide login request
     document.getElementById('landing').classList.add('d-none');
 
     // User creation with access token
-    const user = new User(document.location.hash.match(/access_token=(\w+)/)[1], clientId);
+    const user = new User(window.localStorage.getItem('access_token'), clientId);
 
     // Retrieving user information with access token
     user.getUser()
@@ -23,7 +22,21 @@ if (document.location.hash) {
     })
     .catch((error) => {
         console.error(error);
+
+        // Deleting saved information and reloading
+        window.localStorage.clear();
+        document.location.reload();
     });
+} else if (document.location.hash) {
+    // Hide login request
+    document.getElementById('landing').classList.add('d-none');
+
+    // Access token registration
+    window.localStorage.setItem('access_token', document.location.hash.match(/access_token=(\w+)/)[1]);
+
+    // Redirection to alerts display  
+    history.replaceState({}, document.title, window.location.pathname);
+    document.location.reload();
 } else {
     // Customization of the url with application information
     document.getElementById('connect')
