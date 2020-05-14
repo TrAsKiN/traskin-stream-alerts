@@ -18,9 +18,14 @@ if (window.localStorage.getItem('access_token')) {
         .then(() => {
             const followers = new Followers(user.lastFollower, user.totalFollowers);
             window.setInterval(() => {
-                console.log('New follow!');
-                followers.newFollow('Test_follower');
-            }, 10000);
+                user.getLastFollow()
+                .then(() => {
+                    if (user.lastFollower != followers.lastFollowerName) {
+                        console.log('New follow!');
+                        followers.newFollow(user.lastFollower);
+                    }
+                });
+            }, 1000);
         })
         .catch((error) => {
             console.error(error);
@@ -35,7 +40,7 @@ if (window.localStorage.getItem('access_token')) {
 
         })
         .catch((error) => {
-
+            console.error(error);
         });
     })
     .catch((error) => {

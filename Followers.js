@@ -2,6 +2,7 @@
 
 class Followers {
     lastFollower;
+    lastFollowerName;
     newFollower;
     totalFollowers;
 
@@ -14,6 +15,7 @@ class Followers {
 
     initialize(lastFollower, totalFollowers) {
         this.lastFollower.innerHTML = lastFollower;
+        this.lastFollowerName = lastFollower;
         this.totalFollowers.innerHTML = 'Road to affiliate '+ totalFollowers +' / '+ Math.ceil((totalFollowers+1)/10)*10;
         this.newFollower.innerHTML = null;
         document.querySelector('#followers').classList.remove('d-none');
@@ -22,13 +24,15 @@ class Followers {
     }
 
     newFollow(newFollower) {
-        this.newFollower.innerHTML = newFollower;
+        this.lastFollowerName = newFollower;
+        this.newFollower.innerHTML = this.lastFollowerName;
         this.animate(this.newFollower, 'focus-in-expand').then(() => {
             window.setTimeout(() => {
                 this.animate(this.newFollower, 'slide-out-blurred-bl').then(() => {
                     this.newFollower.innerHTML = null;
                 });
                 this.animate(this.lastFollower, 'fade-out').then(() => {
+                    this.lastFollower.innerHTML = this.lastFollowerName;
                     this.animate(this.lastFollower, 'slide-in-blurred-tr');
                 });
             }, 5000);

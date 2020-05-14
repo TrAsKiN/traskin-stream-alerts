@@ -90,7 +90,7 @@
         opacity: 1;
     }
     100% {
-        transform: translate(-1000px, 1000px) skew(-80deg, -10deg);
+        transform: translate(-500px, 500px) skew(-80deg, -10deg);
         transform-origin: 100% 100%;
         filter: blur(40px);
         opacity: 0;
