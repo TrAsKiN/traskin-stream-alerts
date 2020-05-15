@@ -6,6 +6,7 @@ const clientId = 'nxyyskr9bnxcy08abnfnhrmxvqtjht';
 if (window.localStorage.getItem('access_token')) {
     // Hide login request
     document.getElementById('landing').classList.add('d-none');
+    document.getElementById('overlay').classList.remove('d-none');
 
     // User creation with access token
     const user = new User(window.localStorage.getItem('access_token'), clientId);

@@ -5,27 +5,37 @@ class Followers {
     lastFollowerName;
     newFollower;
     totalFollowers;
+    totalFollowersCount;
+    stepTotalFollowers = 10;
+    textTotalFollowers = 'Road to affiliate';
 
     constructor(lastFollower, totalFollowers) {
         this.lastFollower = document.querySelector('#last-follower');
         this.newFollower = document.querySelector('#new-follower');
         this.totalFollowers = document.querySelector('#total-followers');
+        document.querySelector('#followers').classList.remove('d-none');
         this.initialize(lastFollower, totalFollowers);
     }
 
     initialize(lastFollower, totalFollowers) {
         this.lastFollower.innerHTML = lastFollower;
         this.lastFollowerName = lastFollower;
-        this.totalFollowers.innerHTML = 'Road to affiliate '+ totalFollowers +' / '+ Math.ceil((totalFollowers+1)/10)*10;
+        this.totalFollowersCount = totalFollowers;
+        this.totalFollowers.innerHTML = this.totalFollowersCount;
+        document.querySelector('#total-followers-text').innerHTML = this.textTotalFollowers +' ';
+        document.querySelector('#total-followers-step').innerHTML = '/ '+ this.checkStep(this.totalFollowersCount);
         this.newFollower.innerHTML = null;
-        document.querySelector('#followers').classList.remove('d-none');
-        this.animate(this.totalFollowers, 'slide-in-blurred-top');
-        this.animate(this.lastFollower, 'slide-in-blurred-bl');
+        this.animate(document.querySelector('#overlay-total-followers'), 'init-in-top');
+        this.animate(document.querySelector('#overlay-last-follower'), 'init-in-left');
     }
 
-    newFollow(newFollower) {
+    newFollow(newFollower, totalFollowers) {
         this.lastFollowerName = newFollower;
         this.newFollower.innerHTML = this.lastFollowerName;
+        this.totalFollowersCount = totalFollowers;
+        this.totalFollowers.innerHTML = this.totalFollowersCount;
+        document.querySelector('#total-followers-step').innerHTML = '/ '+ this.checkStep(this.totalFollowersCount);
+        document.querySelector('#new-follow-sound').play();
         this.animate(this.newFollower, 'focus-in-expand').then(() => {
             window.setTimeout(() => {
                 this.animate(this.newFollower, 'slide-out-blurred-bl').then(() => {
@@ -52,5 +62,9 @@ class Followers {
                 resolve('Animation ended');
             });
         })
+    }
+
+    checkStep(count) {
+        return Math.ceil((count+1)/this.stepTotalFollowers)*this.stepTotalFollowers;
     }
 };

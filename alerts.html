@@ -8,19 +8,32 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
         <link rel="icon" href="favicon.ico">
 
+        <link rel="stylesheet" href="overlay.css">
         <link rel="stylesheet" href="Followers.css">
     </head>
     <body>
-        <div class="container text-center">
+        <div class="container-fluid text-center">
             <div id="landing">
                 <p class="lead">We need your permission to get all the information from your lives!</p>
                 <p><a href="https://id.twitch.tv/oauth2/authorize?client_id=<client_id>&redirect_uri=<url>&response_type=token&scope=bits:read+channel:read:redemptions+channel_subscriptions" class="btn btn-primary" id="connect">Connect with Twitch</a></p>
             </div>
-        </div>
-        <div id="followers" class="d-none">
-            <div id="total-followers">{total_followers}</div>
-            <div id="new-follower">{new_follower}</div>
-            <div id="last-follower">{last_follower}</div>
+            <div id="overlay" class="d-none">
+                <div id="followers" class="d-none">
+                    <audio src="new-follow.ogg" id="new-follow-sound"></audio>
+                    <div id="overlay-total-followers">
+                        <div id="total-followers-text">{total_followers_text}</div>
+                        <div id="total-followers">{total_followers}</div>
+                        <div id="total-followers-step">{total_followers_step}</div>
+                    </div>
+                    <div id="new-follower">{new_follower}</div>
+                    <div id="overlay-last-follower">
+                        Dernier follow : <div id="last-follower">{last_follower}</div>
+                    </div>
+                </div>
+                <div id="infos-banner">
+                    
+                </div>
+            </div>
         </div>
         <script src="User.js"></script>
         <script src="PubSub.js"></script>
