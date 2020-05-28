@@ -23,7 +23,7 @@ if (window.localStorage.getItem('access_token')) {
                 .then(() => {
                     if (user.lastFollower != followers.lastFollowerName) {
                         console.log('New follow!');
-                        followers.newFollow(user.lastFollower);
+                        followers.newFollow(user.lastFollower, user.totalFollowers);
                     }
                 });
             }, 1000);
