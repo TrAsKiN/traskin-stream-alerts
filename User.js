@@ -7,6 +7,7 @@ class User {
     clientId;
     totalFollowers;
     lastFollower;
+    waiting = false;
 
     constructor(token, clientId) {
         this.token = token;
@@ -28,15 +29,22 @@ class User {
     }
     getLastFollow() {
         return new Promise((resolve, reject) => {
-            this.httpRequest('https://api.twitch.tv/helix/users/follows?first=1&to_id=' + this.id)
-            .then((response) => {
-                this.totalFollowers = response.total;
-                this.lastFollower = response.data[0].from_name;
-                resolve(response);
-            })
-            .catch((response) => {
-                reject(response);
-            });
+            if (!this.waiting) {
+                this.waiting = true;
+                this.httpRequest('https://api.twitch.tv/helix/users/follows?first=1&to_id=' + this.id)
+                .then((response) => {
+                    this.waiting = false;
+                    this.totalFollowers = response.total;
+                    this.lastFollower = response.data[0].from_name;
+                    resolve(response);
+                })
+                .catch((response) => {
+                    this.waiting = false;
+                    reject(response);
+                });
+            } else {
+                reject(false);
+            }
         });
     }
 
