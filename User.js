@@ -39,8 +39,10 @@ class User {
                     resolve(response);
                 })
                 .catch((response) => {
-                    this.waiting = false;
                     reject(response);
+                })
+                .finally(() => {
+                    this.waiting = false;
                 });
             } else {
                 reject(false);
