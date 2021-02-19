@@ -10,14 +10,13 @@
         display: inline-block;
     }
 #overlay-total-followers {
-    margin: auto;
-    margin-top: 10px;
+    margin: 10px auto auto;
     font-size: 20px !important;
     color: rgba(213, 212, 210, .6);
     width: 400px;
     background-color: rgba(0, 0, 0, .3);
     border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, .3);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .3);
 }
     #total-followers, #total-followers-text, #total-followers-step {
         display: inline-block;
@@ -31,7 +30,7 @@
     font-weight: 300 !important;
     line-height: 1.2 !important;
     color: rgba(213, 212, 210, 1);
-    text-shadow: 0px 0px 40px rgba(0, 0, 0, 1);
+    text-shadow: 0 0 40px rgba(0, 0, 0, 1);
 }
 
 .init-in-top {

@@ -11,9 +11,12 @@ class PubSub {
         this.channel = channel;
     }
 
-    start(trigger) {
+    /**
+     * @returns {Promise<json>}
+     */
+    start() {
         return new Promise((resolve, reject) =>{
-            var ping = window.setInterval(() => {
+            let ping = window.setInterval(() => {
                 console.log('Sending PING to the server...');
                 this.socket.send(JSON.stringify({"type": "PING"}));
             }, 300000);
@@ -34,7 +37,7 @@ class PubSub {
                     case 'MESSAGE':
                         console.log('The server has sent a message!');
                         console.log(response.data);
-                        trigger(response.data);
+                        resolve(response.data);
                         break;
                     case 'PONG':
                         console.log('The server responded PONG to the request!');
@@ -69,4 +72,4 @@ class PubSub {
             }
         });
     }
-};
+}

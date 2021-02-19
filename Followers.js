@@ -7,7 +7,7 @@ class Followers {
     totalFollowers;
     totalFollowersCount;
     stepTotalFollowers = 10;
-    textTotalFollowers = 'Road to affiliate';
+    textTotalFollowers = 'Followers';
 
     constructor(lastFollower, totalFollowers) {
         this.lastFollower = document.querySelector('#last-follower');
@@ -25,8 +25,8 @@ class Followers {
         document.querySelector('#total-followers-text').innerHTML = this.textTotalFollowers +' ';
         document.querySelector('#total-followers-step').innerHTML = '/ '+ this.checkStep(this.totalFollowersCount);
         this.newFollower.innerHTML = null;
-        this.animate(document.querySelector('#overlay-total-followers'), 'init-in-top');
-        this.animate(document.querySelector('#overlay-last-follower'), 'init-in-left');
+        this.animate(document.querySelector('#overlay-total-followers'), 'init-in-top').then();
+        this.animate(document.querySelector('#overlay-last-follower'), 'init-in-left').then();
     }
 
     newFollow(newFollower, totalFollowers) {
@@ -43,12 +43,17 @@ class Followers {
                 });
                 this.animate(this.lastFollower, 'fade-out').then(() => {
                     this.lastFollower.innerHTML = this.lastFollowerName;
-                    this.animate(this.lastFollower, 'slide-in-blurred-tr');
+                    this.animate(this.lastFollower, 'slide-in-blurred-tr').then();
                 });
             }, 5000);
         });
     }
 
+    /**
+     * @param element
+     * @param animation
+     * @returns {Promise<string>}
+     */
     animate(element, animation) {
         return new Promise((resolve, reject) => {
             const animationName = animation;
@@ -67,4 +72,4 @@ class Followers {
     checkStep(count) {
         return Math.ceil((count+1)/this.stepTotalFollowers)*this.stepTotalFollowers;
     }
-};
+}

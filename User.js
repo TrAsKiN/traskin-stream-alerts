@@ -14,6 +14,9 @@ class User {
         this.clientId = clientId;
     }
 
+    /**
+     * @returns {Promise<json>}
+     */
     getUser() {
         return new Promise((resolve, reject) => {
             this.httpRequest('https://api.twitch.tv/helix/users')
@@ -27,6 +30,10 @@ class User {
             });
         });
     }
+
+    /**
+     * @returns {Promise<?json>}
+     */
     getLastFollow() {
         return new Promise((resolve, reject) => {
             if (!this.waiting) {
@@ -45,11 +52,15 @@ class User {
                     this.waiting = false;
                 });
             } else {
-                reject(false);
+                reject();
             }
         });
     }
 
+    /**
+     * @param url
+     * @returns {Promise<json>}
+     */
     httpRequest(url) {
         return new Promise((resolve, reject) => {
             const request = new XMLHttpRequest();
@@ -73,4 +84,4 @@ class User {
             request.send();
         });
     }
-};
+}

@@ -21,7 +21,7 @@ if (window.localStorage.getItem('access_token')) {
             window.setInterval(() => {
                 user.getLastFollow()
                 .then(() => {
-                    if (user.lastFollower != followers.lastFollowerName) {
+                    if (user.lastFollower !== followers.lastFollowerName) {
                         console.log('New follow!');
                         followers.newFollow(user.lastFollower, user.totalFollowers);
                     }
@@ -34,11 +34,9 @@ if (window.localStorage.getItem('access_token')) {
 
         // Creating and starting the websocket
         const pubsub = new PubSub(socket, user.token, user.id);
-        pubsub.start((message) => {
-            console.debug(message);
-        })
-        .then(() => {
-
+        pubsub.start()
+        .then((response) => {
+            console.debug(response);
         })
         .catch((error) => {
             console.error(error);
