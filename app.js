@@ -3,9 +3,10 @@
 const socket = new WebSocket('wss://pubsub-edge.twitch.tv:443');
 const clientId = 'nxyyskr9bnxcy08abnfnhrmxvqtjht';
 
+document.getElementById('landing').classList.add('d-none');
+
 if (window.localStorage.getItem('access_token')) {
     // Hide login request
-    document.getElementById('landing').classList.add('d-none');
     document.getElementById('overlay').classList.remove('d-none');
 
     // User creation with access token
@@ -14,6 +15,7 @@ if (window.localStorage.getItem('access_token')) {
     // Retrieving user information with access token
     user.getUser()
     .then(() => {
+        console.debug(user);
         // Retrieving the last follower and the total number of followers
         user.getLastFollow()
         .then(() => {
@@ -50,32 +52,37 @@ if (window.localStorage.getItem('access_token')) {
         document.location.reload();
     });
 } else if (document.location.hash) {
-    // Hide login request
-    document.getElementById('landing').classList.add('d-none');
+    if (document.location.hash.slice(1) === 'dashboard') {
+        // Customization of the url with application information
+        document.getElementById('landing').classList.remove('d-none');
+        document.getElementById('connect')
+            .setAttribute(
+                'href',
+                document.getElementById('connect')
+                    .getAttribute('href')
+                    .replace('<url>', document.location.href.split('#')[0])
+            )
+        ;
+        document.getElementById('connect')
+            .setAttribute(
+                'href',
+                document.getElementById('connect')
+                    .getAttribute('href')
+                    .replace('<client_id>', clientId)
+            )
+        ;
+        console.info('Please login to continue.');
+    } else {
+        // Hide login request
+        document.getElementById('landing').classList.add('d-none');
 
-    // Access token registration
-    window.localStorage.setItem('access_token', document.location.hash.match(/access_token=(\w+)/)[1]);
+        // Access token registration
+        window.localStorage.setItem('access_token', document.location.hash.match(/access_token=(\w+)/)[1]);
 
-    // Redirection to alerts display
-    history.replaceState({}, document.title, window.location.pathname);
-    document.location.reload();
+        // Redirection to alerts display
+        history.replaceState({}, document.title, window.location.pathname);
+        document.location.reload();
+    }
 } else {
-    // Customization of the url with application information
-    document.getElementById('connect')
-            .setAttribute(
-                'href',
-                document.getElementById('connect')
-                        .getAttribute('href')
-                        .replace('<url>', document.location.href)
-            )
-    ;
-    document.getElementById('connect')
-            .setAttribute(
-                'href',
-                document.getElementById('connect')
-                        .getAttribute('href')
-                        .replace('<client_id>', clientId)
-            )
-    ;
-    console.info('Please login to continue.');
+    console.info('Use the dashboard, to login, at this address: '+ document.location.origin + document.location.pathname +'#dashboard');
 }
