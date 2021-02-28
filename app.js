@@ -7,18 +7,22 @@ if (window.localStorage.getItem('access_token')) {
     if (document.location.hash.slice(1) === 'dashboard') {
         console.info('Welcome on the dashboard.');
 
+        document.querySelector('#alertsLink').innerHTML = document.location.origin + document.location.pathname;
+
         const user = new User(window.localStorage.getItem('access_token'), clientId);
 
         document.getElementById('dashboard').classList.remove('d-none');
+        document.body.classList.add('bg-dark', 'text-light');
         document.getElementById('testFollow').addEventListener('click', (e) => {
             e.preventDefault();
             user.getUser()
                 .then(() => {
                     user.getLastFollow()
                         .then(() => {
-                            const followers = new Followers(user.lastFollower, user.totalFollowers);
                             console.log('Test follow!');
-                            followers.newFollow(user.lastFollower, user.totalFollowers);
+                            const newFollowers = JSON.parse(window.localStorage.getItem('newFollowers'));
+                            newFollowers.push('Test_Follow');
+                            window.localStorage.setItem('newFollowers', JSON.stringify(newFollowers));
                         })
                         .catch((error) => {
                             console.error(error);
@@ -26,12 +30,18 @@ if (window.localStorage.getItem('access_token')) {
                 })
             ;
         });
+        document.getElementById('clearStorage').addEventListener('click', (e) => {
+            e.preventDefault();
+            window.localStorage.clear();
+        });
     } else {
         // Hide login request
         document.getElementById('overlay').classList.remove('d-none');
 
         // User creation with access token
         const user = new User(window.localStorage.getItem('access_token'), clientId);
+
+        window.localStorage.setItem('newFollowers', JSON.stringify([]));
 
         // Retrieving user information with access token
         user.getUser()
@@ -43,11 +53,22 @@ if (window.localStorage.getItem('access_token')) {
                         window.setInterval(() => {
                             user.getLastFollow()
                                 .then(() => {
+                                    const newFollowers = JSON.parse(window.localStorage.getItem('newFollowers'));
                                     if (user.lastFollower !== followers.lastFollowerName) {
                                         console.log('New follow!');
-                                        followers.newFollow(user.lastFollower, user.totalFollowers);
+                                        newFollowers.push(user.lastFollower);
                                     }
+                                    window.localStorage.setItem('newFollowers', JSON.stringify(newFollowers));
                                 });
+                        }, 1000);
+                        window.setInterval(() => {
+                            const newFollowers = JSON.parse(window.localStorage.getItem('newFollowers'));
+                            const LastFollowerName = newFollowers.pop();
+                            if (user.lastFollower !== LastFollowerName && LastFollowerName !== undefined) {
+                                console.log('New follow!');
+                                followers.newFollow(user.lastFollower, user.totalFollowers);
+                                window.localStorage.setItem('newFollowers', JSON.stringify(newFollowers));
+                            }
                         }, 1000);
                     })
                     .catch((error) => {
@@ -74,6 +95,8 @@ if (window.localStorage.getItem('access_token')) {
     }
 } else if (document.location.hash) {
     if (document.location.hash.slice(1) === 'dashboard') {
+        document.body.classList.add('bg-dark', 'text-light');
+        window.localStorage.setItem('inDashboard', 'true');
         // Customization of the url with application information
         document.getElementById('landing').classList.remove('d-none');
         document.getElementById('connect')
@@ -100,9 +123,15 @@ if (window.localStorage.getItem('access_token')) {
         // Access token registration
         window.localStorage.setItem('access_token', document.location.hash.match(/access_token=(\w+)/)[1]);
 
-        // Redirection to alerts display
-        history.replaceState({}, document.title, window.location.pathname);
-        document.location.reload();
+        if (window.localStorage.getItem('inDashboard')) {
+            // Redirection to dashboard
+            history.replaceState({}, document.title, window.location.pathname + '#dashboard');
+            document.location.reload();
+        } else {
+            // Redirection to alerts display
+            history.replaceState({}, document.title, window.location.pathname);
+            document.location.reload();
+        }
     }
 } else {
     console.info('Use the dashboard, to login, at this address: '+ document.location.origin + document.location.pathname +'#dashboard');

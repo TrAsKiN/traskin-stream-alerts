@@ -32,11 +32,20 @@
                 </div>
                 <div id="infos-banner"></div>
             </div>
-            <div id="dashboard" class="container d-none">
-                <div class="row">
+            <div id="dashboard" class="container-fluid d-none p-2">
+                <div class="row my-1">
                     <div class="col">
-                        <h1>Test</h1>
-                        <button type="button" class="btn btn-info" id="testFollow">Test Follow</button>
+                        <p class="font-weight-light">Link to the alerts display: <span id="alertsLink" class="p-1 bg-secondary rounded font-weight-normal">{url}</span></p>
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="col">
+                        <button type="button" class="btn btn-sm btn-info" id="testFollow">Relaunch Follow</button>
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="col">
+                        <button type="button" class="btn btn-sm btn-danger" id="clearStorage">Clear Storage</button>
                     </div>
                 </div>
             </div>
