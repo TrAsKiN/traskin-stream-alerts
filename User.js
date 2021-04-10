@@ -52,7 +52,7 @@ class User {
                     this.waiting = false;
                 });
             } else {
-                reject();
+                reject('Already waiting for a previous request.');
             }
         });
     }

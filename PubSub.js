@@ -15,12 +15,12 @@ class PubSub {
      * @returns {Promise<json>}
      */
     start() {
-        return new Promise((resolve, reject) =>{
+        return new Promise((resolve, reject) => {
             let ping = window.setInterval(() => {
                 console.log('Sending PING to the server...');
                 this.socket.send(JSON.stringify({"type": "PING"}));
             }, 300000);
-    
+
             this.socket.onmessage = (message) => {
                 const response = JSON.parse(message.data);
                 console.debug('Response message:', response);
@@ -36,8 +36,17 @@ class PubSub {
                         break;
                     case 'MESSAGE':
                         console.log('The server has sent a message!');
-                        console.log(response.data);
-                        resolve(response.data);
+                        console.debug('Response data:', response.data);
+                        let body = response.data;
+                        if (body.topic === 'channel-bits-events-v2.'+ this.channel) {
+                            console.debug('Bits message:', body.message);
+                        }
+                        if (body.topic === 'channel-points-channel-v1.'+ this.channel) {
+                            console.debug('Channel points message:', body.message);
+                        }
+                        if (body.topic === 'channel-subscribe-events-v1.'+ this.channel) {
+                            console.debug('Subscribe message:', body.message);
+                        }
                         break;
                     case 'PONG':
                         console.log('The server responded PONG to the request!');
@@ -69,6 +78,7 @@ class PubSub {
                 console.log('Connection is closed.');
                 console.timeEnd('Connection time');
                 window.clearInterval(ping);
+                resolve();
             }
         });
     }

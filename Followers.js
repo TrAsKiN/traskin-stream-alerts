@@ -14,6 +14,12 @@ class Followers {
         this.newFollower = document.querySelector('#new-follower');
         this.totalFollowers = document.querySelector('#total-followers');
         document.querySelector('#followers').classList.remove('d-none');
+        if (!isNaN(JSON.parse(window.localStorage.getItem('stepTotalFollowers')))) {
+            this.stepTotalFollowers = JSON.parse(window.localStorage.getItem('stepTotalFollowers'));
+        } else {
+            window.localStorage.setItem('stepTotalFollowers', JSON.stringify(this.stepTotalFollowers));
+        }
+        console.debug('Steps for total followers:', JSON.parse(window.localStorage.getItem('stepTotalFollowers')));
         this.initialize(lastFollower, totalFollowers);
     }
 
@@ -55,7 +61,7 @@ class Followers {
      * @returns {Promise<string>}
      */
     animate(element, animation) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const animationName = animation;
 
             element.classList.add(animationName);
@@ -66,7 +72,7 @@ class Followers {
 
                 resolve('Animation ended');
             });
-        })
+        });
     }
 
     checkStep(count) {

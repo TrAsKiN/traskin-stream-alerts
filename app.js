@@ -4,37 +4,7 @@ const socket = new WebSocket('wss://pubsub-edge.twitch.tv:443');
 const clientId = 'nxyyskr9bnxcy08abnfnhrmxvqtjht';
 
 if (window.localStorage.getItem('access_token')) {
-    if (document.location.hash.slice(1) === 'dashboard') {
-        console.info('Welcome on the dashboard.');
-
-        document.querySelector('#alertsLink').innerHTML = document.location.origin + document.location.pathname;
-
-        const user = new User(window.localStorage.getItem('access_token'), clientId);
-
-        document.getElementById('dashboard').classList.remove('d-none');
-        document.body.classList.add('bg-dark', 'text-light');
-        document.getElementById('testFollow').addEventListener('click', (e) => {
-            e.preventDefault();
-            user.getUser()
-                .then(() => {
-                    user.getLastFollow()
-                        .then(() => {
-                            console.log('Test follow!');
-                            const newFollowers = JSON.parse(window.localStorage.getItem('newFollowers'));
-                            newFollowers.push('Test_Follow');
-                            window.localStorage.setItem('newFollowers', JSON.stringify(newFollowers));
-                        })
-                        .catch((error) => {
-                            console.error(error);
-                        });
-                })
-            ;
-        });
-        document.getElementById('clearStorage').addEventListener('click', (e) => {
-            e.preventDefault();
-            window.localStorage.clear();
-        });
-    } else {
+    if (document.location.hash.slice(1) !== 'dashboard') {
         // Hide login request
         document.getElementById('overlay').classList.remove('d-none');
 
@@ -59,6 +29,9 @@ if (window.localStorage.getItem('access_token')) {
                                         newFollowers.push(user.lastFollower);
                                     }
                                     window.localStorage.setItem('newFollowers', JSON.stringify(newFollowers));
+                                })
+                                .catch((error) => {
+                                    console.warn(error);
                                 });
                         }, 1000);
                         window.setInterval(() => {
@@ -72,7 +45,7 @@ if (window.localStorage.getItem('access_token')) {
                         }, 1000);
                     })
                     .catch((error) => {
-                        console.error(error);
+                        console.warn(error);
                     });
 
                 // Creating and starting the websocket
@@ -91,32 +64,11 @@ if (window.localStorage.getItem('access_token')) {
                 // Deleting saved information and reloading
                 window.localStorage.clear();
                 document.location.reload();
-            });
+            })
+        ;
     }
 } else if (document.location.hash) {
-    if (document.location.hash.slice(1) === 'dashboard') {
-        document.body.classList.add('bg-dark', 'text-light');
-        window.localStorage.setItem('inDashboard', 'true');
-        // Customization of the url with application information
-        document.getElementById('landing').classList.remove('d-none');
-        document.getElementById('connect')
-            .setAttribute(
-                'href',
-                document.getElementById('connect')
-                    .getAttribute('href')
-                    .replace('<url>', document.location.href.split('#')[0])
-            )
-        ;
-        document.getElementById('connect')
-            .setAttribute(
-                'href',
-                document.getElementById('connect')
-                    .getAttribute('href')
-                    .replace('<client_id>', clientId)
-            )
-        ;
-        console.info('Please login to continue.');
-    } else {
+    if (document.location.hash.slice(1) !== 'dashboard') {
         // Hide login request
         document.getElementById('landing').classList.add('d-none');
 
