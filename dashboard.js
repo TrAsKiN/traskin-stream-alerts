@@ -13,7 +13,9 @@ if (window.localStorage.getItem('access_token')) {
             window.localStorage.setItem('stepTotalFollowers', '10');
         }
         if (window.localStorage.getItem('textTotalFollowers') !== null) {
-            document.getElementById('textTotalFollowers').value = window.localStorage.getItem('textTotalFollowers');
+            document.getElementById('textTotalFollowers').value = JSON.parse(
+                window.localStorage.getItem('textTotalFollowers')
+            );
         } else {
             window.localStorage.setItem('textTotalFollowers', 'Followers');
         }
