@@ -25,7 +25,7 @@ class Followers {
         console.debug('Steps for total followers:', JSON.parse(window.localStorage.getItem('stepTotalFollowers')));
 
         if (window.localStorage.getItem('textTotalFollowers') !== null) {
-            this.textTotalFollowers = JSON.parse(window.localStorage.getItem('textTotalFollowers'));
+            this.textTotalFollowers = window.localStorage.getItem('textTotalFollowers');
         } else {
             window.localStorage.setItem('textTotalFollowers', JSON.stringify(this.textTotalFollowers));
         }
