@@ -1,4 +1,6 @@
-# How to add TrAsKiN Stream Alerts in OBS Studio?
+#TrAsKiN Stream Alert
+
+## How to add TrAsKiN Stream Alerts in OBS Studio?
 
 * Add a **browser source** in the *scene* where you want to add the alerts
 * In the **URL** field use the following address: **https://traskin.github.io/traskin-stream-alerts/**

@@ -52,7 +52,7 @@ class User {
                     this.waiting = false;
                 });
             } else {
-                reject('Already waiting for a previous request.');
+                reject('Get the last follow is already waiting for a previous request.');
             }
         });
     }

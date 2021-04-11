@@ -13,40 +13,51 @@ if (window.localStorage.getItem('access_token')) {
 
         window.localStorage.setItem('newFollowers', JSON.stringify([]));
 
+        let followAlerts = true;
+        if (window.localStorage.getItem('enableFollowAlerts') !== null) {
+            followAlerts = JSON.parse(
+                window.localStorage.getItem('enableFollowAlerts')
+            );
+        }
+
         // Retrieving user information with access token
         user.getUser()
             .then(() => {
-                // Retrieving the last follower and the total number of followers
-                user.getLastFollow()
-                    .then(() => {
-                        const followers = new Followers(user.lastFollower, user.totalFollowers);
-                        window.setInterval(() => {
-                            user.getLastFollow()
-                                .then(() => {
-                                    const newFollowers = JSON.parse(window.localStorage.getItem('newFollowers'));
-                                    if (user.lastFollower !== followers.lastFollowerName) {
-                                        console.log('New follow!');
-                                        newFollowers.push(user.lastFollower);
-                                    }
+                if (followAlerts) {
+                    // Retrieving the last follower and the total number of followers
+                    user.getLastFollow()
+                        .then(() => {
+                            const followers = new Followers(user.lastFollower, user.totalFollowers);
+                            window.setInterval(() => {
+                                user.getLastFollow()
+                                    .then(() => {
+                                        const newFollowers = JSON.parse(window.localStorage.getItem('newFollowers'));
+                                        if (user.lastFollower !== followers.lastFollowerName) {
+                                            console.log('New follow!');
+                                            newFollowers.push(user.lastFollower);
+                                        }
+                                        window.localStorage.setItem('newFollowers', JSON.stringify(newFollowers));
+                                    })
+                                    .catch((error) => {
+                                        console.log(error);
+                                    })
+                                ;
+                            }, 1000);
+                            window.setInterval(() => {
+                                const newFollowers = JSON.parse(window.localStorage.getItem('newFollowers'));
+                                const LastFollowerName = newFollowers.pop();
+                                if (user.lastFollower !== LastFollowerName && LastFollowerName !== undefined) {
+                                    console.log('New follow!');
+                                    followers.newFollow(user.lastFollower, user.totalFollowers);
                                     window.localStorage.setItem('newFollowers', JSON.stringify(newFollowers));
-                                })
-                                .catch((error) => {
-                                    console.warn(error);
-                                });
-                        }, 1000);
-                        window.setInterval(() => {
-                            const newFollowers = JSON.parse(window.localStorage.getItem('newFollowers'));
-                            const LastFollowerName = newFollowers.pop();
-                            if (user.lastFollower !== LastFollowerName && LastFollowerName !== undefined) {
-                                console.log('New follow!');
-                                followers.newFollow(user.lastFollower, user.totalFollowers);
-                                window.localStorage.setItem('newFollowers', JSON.stringify(newFollowers));
-                            }
-                        }, 1000);
-                    })
-                    .catch((error) => {
-                        console.warn(error);
-                    });
+                                }
+                            }, 1000);
+                        })
+                        .catch((error) => {
+                            console.warn(error);
+                        })
+                    ;
+                }
 
                 // Creating and starting the websocket
                 const pubsub = new PubSub(socket, user.token, user.id);
@@ -56,7 +67,8 @@ if (window.localStorage.getItem('access_token')) {
                     })
                     .catch((error) => {
                         console.error(error);
-                    });
+                    })
+                ;
             })
             .catch((error) => {
                 console.error(error);

@@ -8,18 +8,36 @@ class Followers {
     totalFollowersCount;
     stepTotalFollowers = 10;
     textTotalFollowers = 'Followers';
+    enableFollowerGoal = true;
 
     constructor(lastFollower, totalFollowers) {
         this.lastFollower = document.querySelector('#last-follower');
         this.newFollower = document.querySelector('#new-follower');
         this.totalFollowers = document.querySelector('#total-followers');
+
         document.querySelector('#followers').classList.remove('d-none');
-        if (!isNaN(JSON.parse(window.localStorage.getItem('stepTotalFollowers')))) {
+
+        if (window.localStorage.getItem('stepTotalFollowers') !== null) {
             this.stepTotalFollowers = JSON.parse(window.localStorage.getItem('stepTotalFollowers'));
         } else {
             window.localStorage.setItem('stepTotalFollowers', JSON.stringify(this.stepTotalFollowers));
         }
         console.debug('Steps for total followers:', JSON.parse(window.localStorage.getItem('stepTotalFollowers')));
+
+        if (window.localStorage.getItem('textTotalFollowers') !== null) {
+            this.textTotalFollowers = JSON.parse(window.localStorage.getItem('textTotalFollowers'));
+        } else {
+            window.localStorage.setItem('textTotalFollowers', JSON.stringify(this.textTotalFollowers));
+        }
+        console.debug('Text for total followers:', JSON.parse(window.localStorage.getItem('textTotalFollowers')));
+
+        if (window.localStorage.getItem('enableFollowerGoal') !== null) {
+            this.enableFollowerGoal = JSON.parse(window.localStorage.getItem('enableFollowerGoal'));
+        } else {
+            window.localStorage.setItem('enableFollowerGoal', JSON.stringify(this.enableFollowerGoal));
+        }
+        console.debug('Follower goal:', JSON.parse(window.localStorage.getItem('enableFollowerGoal')));
+
         this.initialize(lastFollower, totalFollowers);
     }
 
@@ -31,7 +49,11 @@ class Followers {
         document.querySelector('#total-followers-text').innerHTML = this.textTotalFollowers +' ';
         document.querySelector('#total-followers-step').innerHTML = '/ '+ this.checkStep(this.totalFollowersCount);
         this.newFollower.innerHTML = null;
-        this.animate(document.querySelector('#overlay-total-followers'), 'init-in-top').then();
+        if (this.enableFollowerGoal) {
+            this.animate(document.querySelector('#overlay-total-followers'), 'init-in-top').then();
+        } else {
+            document.querySelector('#overlay-total-followers').classList.add('d-none');
+        }
         this.animate(document.querySelector('#overlay-last-follower'), 'init-in-left').then();
     }
 

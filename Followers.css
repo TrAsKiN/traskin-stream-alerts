@@ -13,10 +13,12 @@
     margin: 10px auto auto;
     font-size: 20px !important;
     color: rgba(213, 212, 210, .6);
-    width: 400px;
+    width: fit-content;
+    min-width: 400px;
     background-color: rgba(0, 0, 0, .3);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, .3);
+    padding: 0 15px;
 }
     #total-followers, #total-followers-text, #total-followers-step {
         display: inline-block;
