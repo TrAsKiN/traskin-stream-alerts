@@ -5,28 +5,26 @@ if (window.localStorage.getItem('access_token')) {
         console.info('Welcome on the dashboard.');
         document.body.classList.add('bg-dark', 'text-light');
 
-        if (window.localStorage.getItem('stepTotalFollowers') !== null) {
+        if (window.localStorage.getItem('stepTotalFollowers')) {
             document.getElementById('stepTotalFollowers').value = JSON.parse(
                 window.localStorage.getItem('stepTotalFollowers')
             );
         } else {
             window.localStorage.setItem('stepTotalFollowers', '10');
         }
-        if (window.localStorage.getItem('textTotalFollowers') !== null) {
-            document.getElementById('textTotalFollowers').value = JSON.parse(
-                window.localStorage.getItem('textTotalFollowers')
-            );
+        if (window.localStorage.getItem('textTotalFollowers')) {
+            document.getElementById('textTotalFollowers').value = window.localStorage.getItem('textTotalFollowers');
         } else {
             window.localStorage.setItem('textTotalFollowers', 'Followers');
         }
-        if (window.localStorage.getItem('enableFollowAlerts') !== null) {
+        if (window.localStorage.getItem('enableFollowAlerts')) {
             document.getElementById('enableFollowAlerts').checked = JSON.parse(
                 window.localStorage.getItem('enableFollowAlerts')
             );
         } else {
             window.localStorage.setItem('enableFollowAlerts', 'true');
         }
-        if (window.localStorage.getItem('enableFollowerGoal') !== null) {
+        if (window.localStorage.getItem('enableFollowerGoal')) {
             document.getElementById('enableFollowerGoal').checked = JSON.parse(
                 window.localStorage.getItem('enableFollowerGoal')
             );
@@ -62,7 +60,7 @@ if (window.localStorage.getItem('access_token')) {
             window.localStorage.clear();
         });
         document.getElementById('textTotalFollowers').addEventListener('change', (e) => {
-            window.localStorage.setItem('textTotalFollowers', JSON.stringify(e.target.value));
+            window.localStorage.setItem('textTotalFollowers', e.target.value);
             console.debug('Text change to:', e.target.value);
         });
         document.getElementById('stepTotalFollowers').addEventListener('change', (e) => {
@@ -101,5 +99,15 @@ if (window.localStorage.getItem('access_token')) {
             )
         ;
         console.info('Please login to continue.');
+    } else {
+        // Hide login request
+        document.getElementById('landing').classList.add('d-none');
+
+        // Access token registration
+        window.localStorage.setItem('access_token', document.location.hash.match(/access_token=(\w+)/)[1]);
+
+        // Redirection to dashboard
+        history.replaceState({}, document.title, window.location.pathname + '#dashboard');
+        document.location.reload();
     }
 }

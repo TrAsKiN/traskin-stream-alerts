@@ -17,21 +17,21 @@ class Followers {
 
         document.querySelector('#followers').classList.remove('d-none');
 
-        if (window.localStorage.getItem('stepTotalFollowers') !== null) {
+        if (window.localStorage.getItem('stepTotalFollowers')) {
             this.stepTotalFollowers = JSON.parse(window.localStorage.getItem('stepTotalFollowers'));
         } else {
             window.localStorage.setItem('stepTotalFollowers', JSON.stringify(this.stepTotalFollowers));
         }
         console.debug('Steps for total followers:', JSON.parse(window.localStorage.getItem('stepTotalFollowers')));
 
-        if (window.localStorage.getItem('textTotalFollowers') !== null) {
-            this.textTotalFollowers = JSON.parse(window.localStorage.getItem('textTotalFollowers'));
+        if (window.localStorage.getItem('textTotalFollowers')) {
+            this.textTotalFollowers = window.localStorage.getItem('textTotalFollowers');
         } else {
-            window.localStorage.setItem('textTotalFollowers', JSON.stringify(this.textTotalFollowers));
+            window.localStorage.setItem('textTotalFollowers', this.textTotalFollowers);
         }
-        console.debug('Text for total followers:', JSON.parse(window.localStorage.getItem('textTotalFollowers')));
+        console.debug('Text for total followers:', window.localStorage.getItem('textTotalFollowers'));
 
-        if (window.localStorage.getItem('enableFollowerGoal') !== null) {
+        if (window.localStorage.getItem('enableFollowerGoal')) {
             this.enableFollowerGoal = JSON.parse(window.localStorage.getItem('enableFollowerGoal'));
         } else {
             window.localStorage.setItem('enableFollowerGoal', JSON.stringify(this.enableFollowerGoal));

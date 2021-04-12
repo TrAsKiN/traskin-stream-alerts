@@ -14,7 +14,7 @@ if (window.localStorage.getItem('access_token')) {
         window.localStorage.setItem('newFollowers', JSON.stringify([]));
 
         let followAlerts = true;
-        if (window.localStorage.getItem('enableFollowAlerts') !== null) {
+        if (window.localStorage.getItem('enableFollowAlerts')) {
             followAlerts = JSON.parse(
                 window.localStorage.getItem('enableFollowAlerts')
             );
@@ -79,24 +79,4 @@ if (window.localStorage.getItem('access_token')) {
             })
         ;
     }
-} else if (document.location.hash) {
-    if (document.location.hash.slice(1) !== 'dashboard') {
-        // Hide login request
-        document.getElementById('landing').classList.add('d-none');
-
-        // Access token registration
-        window.localStorage.setItem('access_token', document.location.hash.match(/access_token=(\w+)/)[1]);
-
-        if (window.localStorage.getItem('inDashboard')) {
-            // Redirection to dashboard
-            history.replaceState({}, document.title, window.location.pathname + '#dashboard');
-            document.location.reload();
-        } else {
-            // Redirection to alerts display
-            history.replaceState({}, document.title, window.location.pathname);
-            document.location.reload();
-        }
-    }
-} else {
-    console.info('Use the dashboard, to login, at this address: '+ document.location.origin + document.location.pathname +'#dashboard');
 }
