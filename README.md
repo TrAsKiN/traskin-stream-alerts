@@ -1,4 +1,4 @@
-#TrAsKiN Stream Alert
+# TrAsKiN Stream Alert
 
 ## How to add TrAsKiN Stream Alerts in OBS Studio?
 
