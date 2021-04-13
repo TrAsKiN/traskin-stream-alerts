@@ -32,7 +32,7 @@ if (window.localStorage.getItem('access_token')) {
                                 user.getLastFollow()
                                     .then(() => {
                                         const newFollowers = JSON.parse(window.localStorage.getItem('newFollowers'));
-                                        if (user.lastFollower !== followers.lastFollowerName) {
+                                        if (user.lastFollower !== followers.lastFollowerName && followers.lastFollowerName !== 'Test_Follow') {
                                             console.log('New follow!');
                                             newFollowers.push(user.lastFollower);
                                         }
@@ -48,7 +48,7 @@ if (window.localStorage.getItem('access_token')) {
                                 const LastFollowerName = newFollowers.pop();
                                 if (user.lastFollower !== LastFollowerName && LastFollowerName !== undefined) {
                                     console.log('New follow!');
-                                    followers.newFollow(user.lastFollower, user.totalFollowers);
+                                    followers.newFollow(LastFollowerName, user.totalFollowers);
                                     window.localStorage.setItem('newFollowers', JSON.stringify(newFollowers));
                                 }
                             }, 1000);

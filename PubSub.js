@@ -51,6 +51,9 @@ class PubSub {
                     case 'PONG':
                         console.log('The server responded PONG to the request!');
                         break;
+                    case 'RECONNECT':
+                        reject('Need to reconnect!');
+                        break;
                     default:
                         console.log('The server responded to the request!');
                 }
