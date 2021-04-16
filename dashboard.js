@@ -1,79 +1,40 @@
 'use strict';
 
-if (window.localStorage.getItem('access_token')) {
+if (Storage.get('accessToken')) {
     if (document.location.hash.slice(1) === 'dashboard') {
         console.info('Welcome on the dashboard.');
         document.body.classList.add('bg-dark', 'text-light');
 
-        if (window.localStorage.getItem('stepTotalFollowers')) {
-            document.getElementById('stepTotalFollowers').value = JSON.parse(
-                window.localStorage.getItem('stepTotalFollowers')
-            );
-        } else {
-            window.localStorage.setItem('stepTotalFollowers', '10');
-        }
-        if (window.localStorage.getItem('textTotalFollowers')) {
-            document.getElementById('textTotalFollowers').value = window.localStorage.getItem('textTotalFollowers');
-        } else {
-            window.localStorage.setItem('textTotalFollowers', 'Followers');
-        }
-        if (window.localStorage.getItem('enableFollowAlerts')) {
-            document.getElementById('enableFollowAlerts').checked = JSON.parse(
-                window.localStorage.getItem('enableFollowAlerts')
-            );
-        } else {
-            window.localStorage.setItem('enableFollowAlerts', 'true');
-        }
-        if (window.localStorage.getItem('enableFollowerGoal')) {
-            document.getElementById('enableFollowerGoal').checked = JSON.parse(
-                window.localStorage.getItem('enableFollowerGoal')
-            );
-        } else {
-            window.localStorage.setItem('enableFollowerGoal', 'true');
-        }
+        document.getElementById('stepTotalFollowers').value = Storage.get('stepTotalFollowers');
+        document.getElementById('textTotalFollowers').value = Storage.get('textTotalFollowers');
+        document.getElementById('enableFollowAlerts').checked = Storage.get('enableFollowAlerts');
+        document.getElementById('enableFollowerGoal').checked = Storage.get('enableFollowerGoal');
 
         document.querySelector('#alertsLink').innerHTML = document.location.origin + document.location.pathname;
-
-        const user = new User(window.localStorage.getItem('access_token'), clientId);
 
         document.getElementById('dashboard').classList.remove('d-none');
         document.getElementById('testFollow').addEventListener('click', (e) => {
             e.preventDefault();
-            user.getUser()
-                .then(() => {
-                    user.getLastFollow()
-                        .then(() => {
-                            console.log('Test follow!');
-                            const newFollowers = JSON.parse(window.localStorage.getItem('newFollowers'));
-                            newFollowers.push('Test_Follow');
-                            window.localStorage.setItem('newFollowers', JSON.stringify(newFollowers));
-                        })
-                        .catch((error) => {
-                            console.error(error);
-                        })
-                    ;
-                })
-            ;
+            console.log('Test follow!');
+            const newFollowers = JSON.parse(window.localStorage.getItem('newFollowers'));
+            newFollowers.push('Test_Follow');
+            Storage.set('newFollowers', newFollowers);
         });
         document.getElementById('clearStorage').addEventListener('click', (e) => {
             e.preventDefault();
             window.localStorage.clear();
         });
         document.getElementById('textTotalFollowers').addEventListener('change', (e) => {
-            window.localStorage.setItem('textTotalFollowers', e.target.value);
-            console.debug('Text change to:', e.target.value);
+            Storage.set('textTotalFollowers', e.target.value);
         });
         document.getElementById('stepTotalFollowers').addEventListener('change', (e) => {
-            window.localStorage.setItem('stepTotalFollowers', JSON.stringify(e.target.value));
-            console.debug('Step change to:', e.target.value);
+            Storage.set('stepTotalFollowers', e.target.value);
         });
         document.getElementById('enableFollowAlerts').addEventListener('change', (e) => {
-            window.localStorage.setItem('enableFollowAlerts', JSON.stringify(e.target.checked));
-            console.debug('Follow alert set to:', e.target.checked);
+            Storage.set('enableFollowAlerts', e.target.checked);
         });
         document.getElementById('enableFollowerGoal').addEventListener('change', (e) => {
-            window.localStorage.setItem('enableFollowerGoal', JSON.stringify(e.target.checked));
-            console.debug('Follower goal set to:', e.target.checked);
+            Storage.set('enableFollowerGoal', e.target.checked);
         });
     }
 } else if (document.location.hash) {
@@ -104,7 +65,7 @@ if (window.localStorage.getItem('access_token')) {
         document.getElementById('landing').classList.add('d-none');
 
         // Access token registration
-        window.localStorage.setItem('access_token', document.location.hash.match(/access_token=(\w+)/)[1]);
+        Storage.set('accessToken', document.location.hash.match(/access_token=(\w+)/)[1]);
 
         // Redirection to dashboard
         history.replaceState({}, document.title, window.location.pathname + '#dashboard');

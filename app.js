@@ -1,29 +1,20 @@
 'use strict';
 
-const socket = new WebSocket('wss://pubsub-edge.twitch.tv:443');
 const clientId = 'nxyyskr9bnxcy08abnfnhrmxvqtjht';
+const Storage = new LocalStorage();
 
-if (window.localStorage.getItem('access_token')) {
+if (Storage.get('accessToken')) {
     if (document.location.hash.slice(1) !== 'dashboard') {
         // Hide login request
         document.getElementById('overlay').classList.remove('d-none');
 
         // User creation with access token
-        const user = new User(window.localStorage.getItem('access_token'), clientId);
-
-        window.localStorage.setItem('newFollowers', JSON.stringify([]));
-
-        let followAlerts = true;
-        if (window.localStorage.getItem('enableFollowAlerts')) {
-            followAlerts = JSON.parse(
-                window.localStorage.getItem('enableFollowAlerts')
-            );
-        }
+        const user = new User(Storage.get('accessToken'), clientId);
 
         // Retrieving user information with access token
         user.getUser()
             .then(() => {
-                if (followAlerts) {
+                if (Storage.get('enableFollowAlerts')) {
                     // Retrieving the last follower and the total number of followers
                     user.getLastFollow()
                         .then(() => {
@@ -31,12 +22,15 @@ if (window.localStorage.getItem('access_token')) {
                             window.setInterval(() => {
                                 user.getLastFollow()
                                     .then(() => {
-                                        const newFollowers = JSON.parse(window.localStorage.getItem('newFollowers'));
-                                        if (user.lastFollower !== followers.lastFollowerName && followers.lastFollowerName !== 'Test_Follow') {
+                                        const newFollowers = Storage.get('newFollowers');
+                                        if (
+                                            user.lastFollower !== followers.lastFollowerName
+                                            && followers.lastFollowerName !== 'Test_Follow'
+                                        ) {
                                             console.log('New follow!');
                                             newFollowers.push(user.lastFollower);
+                                            Storage.set('newFollowers', newFollowers);
                                         }
-                                        window.localStorage.setItem('newFollowers', JSON.stringify(newFollowers));
                                     })
                                     .catch((error) => {
                                         console.log(error);
@@ -44,12 +38,15 @@ if (window.localStorage.getItem('access_token')) {
                                 ;
                             }, 1000);
                             window.setInterval(() => {
-                                const newFollowers = JSON.parse(window.localStorage.getItem('newFollowers'));
+                                const newFollowers = Storage.get('newFollowers');
                                 const LastFollowerName = newFollowers.pop();
-                                if (user.lastFollower !== LastFollowerName && LastFollowerName !== undefined) {
+                                if (
+                                    user.lastFollower !== LastFollowerName
+                                    && LastFollowerName !== undefined
+                                ) {
                                     console.log('New follow!');
                                     followers.newFollow(LastFollowerName, user.totalFollowers);
-                                    window.localStorage.setItem('newFollowers', JSON.stringify(newFollowers));
+                                    Storage.set('newFollowers', newFollowers);
                                 }
                             }, 1000);
                         })
@@ -60,15 +57,8 @@ if (window.localStorage.getItem('access_token')) {
                 }
 
                 // Creating and starting the websocket
-                const pubsub = new PubSub(socket, user.token, user.id);
-                pubsub.start()
-                    .then((response) => {
-                        console.debug(response);
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    })
-                ;
+                const pubsub = new PubSub(user.token, user.id);
+                pubsub.start();
             })
             .catch((error) => {
                 console.error(error);

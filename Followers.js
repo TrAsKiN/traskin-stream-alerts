@@ -17,26 +17,12 @@ class Followers {
 
         document.querySelector('#followers').classList.remove('d-none');
 
-        if (window.localStorage.getItem('stepTotalFollowers')) {
-            this.stepTotalFollowers = JSON.parse(window.localStorage.getItem('stepTotalFollowers'));
-        } else {
-            window.localStorage.setItem('stepTotalFollowers', JSON.stringify(this.stepTotalFollowers));
-        }
-        console.debug('Steps for total followers:', JSON.parse(window.localStorage.getItem('stepTotalFollowers')));
-
-        if (window.localStorage.getItem('textTotalFollowers')) {
-            this.textTotalFollowers = window.localStorage.getItem('textTotalFollowers');
-        } else {
-            window.localStorage.setItem('textTotalFollowers', this.textTotalFollowers);
-        }
-        console.debug('Text for total followers:', window.localStorage.getItem('textTotalFollowers'));
-
-        if (window.localStorage.getItem('enableFollowerGoal')) {
-            this.enableFollowerGoal = JSON.parse(window.localStorage.getItem('enableFollowerGoal'));
-        } else {
-            window.localStorage.setItem('enableFollowerGoal', JSON.stringify(this.enableFollowerGoal));
-        }
-        console.debug('Follower goal:', JSON.parse(window.localStorage.getItem('enableFollowerGoal')));
+        this.enableFollowerGoal = Storage.enableFollowerGoal;
+        console.debug('Follower goal:', Storage.enableFollowerGoal);
+        this.textTotalFollowers = Storage.textTotalFollowers;
+        console.debug('Text for total followers:', Storage.textTotalFollowers);
+        this.stepTotalFollowers = Storage.stepTotalFollowers;
+        console.debug('Steps for total followers:', Storage.stepTotalFollowers);
 
         this.initialize(lastFollower, totalFollowers);
     }
