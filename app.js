@@ -21,14 +21,14 @@ if (Storage.get('accessToken')) {
                             const followers = new Followers(user.lastFollower, user.totalFollowers);
                             window.setInterval(() => {
                                 user.getLastFollow()
-                                    .then(() => {
+                                    .then((lastFollower) => {
                                         const newFollowers = Storage.get('newFollowers');
                                         if (
-                                            user.lastFollower !== followers.lastFollowerName
-                                            && followers.lastFollowerName !== 'Test_Follow'
+                                            lastFollower !== followers.lastFollowerName
+                                            && !newFollowers.includes(user.lastFollower)
                                         ) {
                                             console.log('New follow!');
-                                            newFollowers.push(user.lastFollower);
+                                            newFollowers.push(lastFollower);
                                             Storage.set('newFollowers', newFollowers);
                                         }
                                     })
@@ -39,13 +39,14 @@ if (Storage.get('accessToken')) {
                             }, 1000);
                             window.setInterval(() => {
                                 const newFollowers = Storage.get('newFollowers');
-                                const LastFollowerName = newFollowers.pop();
+                                const lastFollowerName = newFollowers.pop();
                                 if (
-                                    user.lastFollower !== LastFollowerName
-                                    && LastFollowerName !== undefined
+                                    followers.lastFollowerName !== lastFollowerName
+                                    && lastFollowerName !== undefined
+                                    || lastFollowerName === 'Test_Follow'
                                 ) {
                                     console.log('New follow!');
-                                    followers.newFollow(LastFollowerName, user.totalFollowers);
+                                    followers.newFollow(lastFollowerName, user.totalFollowers);
                                     Storage.set('newFollowers', newFollowers);
                                 }
                             }, 1000);

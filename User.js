@@ -32,7 +32,7 @@ class User {
     }
 
     /**
-     * @returns {Promise<?json>}
+     * @returns {Promise<?json|string>}
      */
     getLastFollow() {
         return new Promise((resolve, reject) => {
@@ -40,10 +40,9 @@ class User {
                 this.waiting = true;
                 this.httpRequest('https://api.twitch.tv/helix/users/follows?first=1&to_id=' + this.id)
                 .then((response) => {
-                    this.waiting = false;
                     this.totalFollowers = response.total;
                     this.lastFollower = response.data[0].from_name;
-                    resolve(response);
+                    resolve(this.lastFollower);
                 })
                 .catch((response) => {
                     reject(response);
