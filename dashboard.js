@@ -12,6 +12,15 @@ if (Storage.get('accessToken')) {
 
         document.querySelector('#alertsLink').innerHTML = document.location.origin + document.location.pathname;
 
+        const alertLink = document.querySelector('#alertsLink').parentNode;
+        if (Storage.get('alertLinkDisabled')) {
+            bootstrap.Alert.getOrCreateInstance(alertLink).close();
+        } else {
+            alertLink.addEventListener('closed.bs.alert', () => {
+                Storage.set('alertLinkDisabled', true);
+            });
+        }
+
         document.getElementById('dashboard').classList.remove('d-none');
         document.getElementById('testFollow').addEventListener('click', (e) => {
             e.preventDefault();

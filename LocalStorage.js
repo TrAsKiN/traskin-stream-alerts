@@ -38,6 +38,12 @@ class LocalStorage {
             this.newFollowers = [];
             window.localStorage.setItem('newFollowers', JSON.stringify(this.newFollowers));
         }
+        if (window.localStorage.getItem('alertLinkDisabled')) {
+            this.alertLinkDisabled = JSON.parse(window.localStorage.getItem('alertLinkDisabled'));
+        } else {
+            this.alertLinkDisabled = false;
+            window.localStorage.setItem('alertLinkDisabled', JSON.stringify(this.alertLinkDisabled));
+        }
     }
 
     set(property, newValue) {
