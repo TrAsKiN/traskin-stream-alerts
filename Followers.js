@@ -9,6 +9,7 @@ class Followers {
     stepTotalFollowers = 10;
     textTotalFollowers = 'Followers';
     enableFollowerGoal = true;
+    animating = false
 
     constructor(lastFollower, totalFollowers) {
         this.lastFollower = document.querySelector('#last-follower');
@@ -44,6 +45,7 @@ class Followers {
     }
 
     newFollow(newFollower, totalFollowers) {
+        this.animating = true
         this.lastFollowerName = newFollower;
         this.newFollower.innerHTML = this.lastFollowerName;
         this.totalFollowersCount = totalFollowers;
@@ -57,7 +59,9 @@ class Followers {
                 });
                 this.animate(this.lastFollower, 'fade-out').then(() => {
                     this.lastFollower.innerHTML = this.lastFollowerName;
-                    this.animate(this.lastFollower, 'slide-in-blurred-tr').then();
+                    this.animate(this.lastFollower, 'slide-in-blurred-tr').then(() => {
+                        this.animating = false
+                    });
                 });
             }, 5000);
         });
