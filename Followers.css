@@ -13,6 +13,7 @@
     margin: 10px auto auto;
     font-size: 20px !important;
     color: rgba(213, 212, 210, .6);
+    width: -moz-fit-content;
     width: fit-content;
     min-width: 400px;
     background-color: rgba(0, 0, 0, .3);
