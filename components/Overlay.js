@@ -15,8 +15,8 @@ class Overlay {
         this.eventsub.connect(dev)
         this.eventsub.onfollow = async event => {
             if (this.storage.get('enableFollowAlerts')) {
-                const total = await this.lastFollow().total
-                alerts.followers.queue(event.user_name, total)
+                const lastFollow = await this.lastFollow()
+                alerts.followers.queue(event.user_name, lastFollow.total)
             }
         }
         this.eventsub.onsub = event => {

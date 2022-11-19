@@ -32,8 +32,8 @@ class Followers {
         this.lastFollowerName = lastFollower
         this.totalFollowersCount = totalFollowers
         this.totalFollowers.innerHTML = this.totalFollowersCount
-        document.querySelector('#total-followers-text').innerHTML = this.textTotalFollowers +' '
-        document.querySelector('#total-followers-step').innerHTML = '/ '+ this.checkStep(this.totalFollowersCount)
+        document.querySelector('#total-followers-text').innerHTML = this.textTotalFollowers
+        document.querySelector('#total-followers-step').innerHTML = this.checkStep(this.totalFollowersCount)
         this.newFollower.innerHTML = null
         if (this.enableFollowerGoal) {
             document.querySelector('#overlay-total-followers').classList.remove('d-none')
@@ -51,8 +51,8 @@ class Followers {
         this.newFollower.innerHTML = this.lastFollowerName
         this.totalFollowersCount = totalFollowers
         this.totalFollowers.innerHTML = this.totalFollowersCount
-        document.querySelector('#total-followers-step').innerHTML = '/ '+ this.checkStep(this.totalFollowersCount)
-        document.querySelector('#new-follow-sound').play()
+        document.querySelector('#total-followers-step').innerHTML = this.checkStep(this.totalFollowersCount)
+        document.querySelector('#new-follow-sound').play().catch(error => {})
         this.animate(this.newFollower, 'focus-in-expand').then(() => {
             window.setTimeout(() => {
                 this.animate(this.newFollower, 'slide-out-blurred-bl').then(() => {

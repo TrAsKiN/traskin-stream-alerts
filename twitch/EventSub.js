@@ -147,7 +147,9 @@ class EventSub {
     }
 
     initiateTimer(message) {
-        this.lastMessageTimestamp = new Date(message.metadata.message_timestamp)
+        if (message.metadata) {
+            this.lastMessageTimestamp = new Date(message.metadata.message_timestamp)
+        }
         if (this.timer) {
             clearTimeout(this.timer)
         }
