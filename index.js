@@ -34,8 +34,6 @@ if (dev) {
 
 const api = new Api(clientId, token, dev)
 
-// window.localStorage.clear()
-
 if (!token) {
     if (document.location.hash) {
         const accessToken = document.location.hash.match(/access_token=(\w+)/)[1]

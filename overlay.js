@@ -1,6 +1,6 @@
 import { LocalStorage } from './components/LocalStorage.js'
 import { Overlay } from './components/Overlay.js'
-import { Followers } from './alerts/Followers/Followers.js'
+import { Followers } from './components/Followers.js'
 import { Api } from './twitch/Api.js'
 import { EventSub } from './twitch/EventSub.js'
 

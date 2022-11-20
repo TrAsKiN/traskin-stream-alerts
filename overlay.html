@@ -6,14 +6,14 @@
         <title>TrAsKiN Stream Alerts - Overlay</title>
         <link rel="icon" href="favicon.ico">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="overlay.css">
-        <link rel="stylesheet" href="alerts/Followers/Followers.css">
+        <link rel="stylesheet" href="styles/overlay.css">
+        <link rel="stylesheet" href="styles/alerts/Followers.css">
     </head>
     <body>
         <div class="container-fluid text-center">
             <div id="overlay" class="d-none">
                 <div id="followers" class="d-none">
-                    <audio src="alerts/Followers/Followers.ogg" id="new-follow-sound"></audio>
+                    <audio src="audio/alerts/Followers.ogg" id="new-follow-sound"></audio>
                     <div id="overlay-total-followers" class="d-none">
                         <span id="total-followers-text"></span>
                         <span id="total-followers"></span> / <span id="total-followers-step"></span>
@@ -23,12 +23,14 @@
                         Dernier follow : <div id="last-follower"></div>
                     </div>
                 </div>
-                <div id="infos-banner"></div>
+                <div id="infos-banner">
+                    
+                </div>
             </div>
         </div>
         <script type="module" src="components/LocalStorage.js"></script>
         <script type="module" src="components/Overlay.js"></script>
-        <script type="module" src="alerts/Followers/Followers.js"></script>
+        <script type="module" src="components/Followers.js"></script>
         <script type="module" src="twitch/Api.js"></script>
         <script type="module" src="twitch/EventSub.js"></script>
         <script type="module" src="overlay.js"></script>
