@@ -11,7 +11,7 @@ class Api {
         }
     }
 
-    call(endpoint, method = 'GET', body = null) {
+    async call(endpoint, method = 'GET', body = null) {
         const headers = new Headers({
             'Authorization': 'Bearer '+ this.token,
             'Client-Id': this.clientId,
@@ -26,7 +26,8 @@ class Api {
         if (body) {
             init.body = body
         }
-        return fetch(this.url + endpoint, init)
+        const response = await fetch(this.url + endpoint, init)
+        return await this.parseResponse(response)
     }
 
     generateAuthUrl(scopes) {
@@ -36,6 +37,16 @@ class Api {
             "response_type": "token",
             "scope": scopes.join("+")
         }).toString()), 'https://id.twitch.tv/').href
+    }
+
+    async parseResponse(response) {
+        if (!response.ok) {
+            console.debug(response)
+            throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+        if (response.status !== 204) {
+            return await response.json()
+        }
     }
 }
 

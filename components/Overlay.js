@@ -13,9 +13,9 @@ class Overlay {
 
     init(alerts, dev = false) {
         this.eventsub.connect(dev)
-        this.eventsub.onfollow = async event => {
+        this.eventsub.onfollow = event => {
             if (this.storage.get('enableFollowAlerts')) {
-                const lastFollow = await this.lastFollow()
+                const lastFollow = this.lastFollow()
                 alerts.followers.queue(event.user_name, lastFollow.total)
             }
         }
@@ -33,12 +33,8 @@ class Overlay {
     }
 
     async lastFollow() {
-        const user = await this.getUser()
-        return await (await this.api.call(`/users/follows?first=1&to_id=${user.id}`)).json()
-    }
-
-    async getUser() {
-        return await (await (await this.api.call('/users')).json()).data[0]
+        const user = await this.api.call('/users')
+        return await this.api.call(`/users/follows?first=1&to_id=${user.data[0].id}`)
     }
 }
 

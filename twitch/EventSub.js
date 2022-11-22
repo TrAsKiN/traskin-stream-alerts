@@ -8,7 +8,7 @@ class EventSub {
     lastMessageTimestamp = null
     broadcasterId = null
     timer = null
-    subscriptionId = null
+    subscriptions = []
 
     constructor(api) {
         this.api = api
@@ -47,18 +47,17 @@ class EventSub {
         }
     }
 
-    async disconnect() {
+    disconnect() {
         this.socket.close()
         clearTimeout(this.timer)
         this.timer = null
         this.sessionId = null
         this.keepaliveTimer = null
         this.lastMessageTimestamp = null
-        if (this.subscriptionId) {
-            await this.api.call('/eventsub/subscriptions?id=' + this.subscriptionId, 'DELETE')
-            .then(response => this.parseResponse(response))
-            this.subscriptionId = null
-        }
+        this.subscriptions.forEach(subscriptionId, index => {
+            this.api.call('/eventsub/subscriptions?id=' + subscriptionId, 'DELETE')
+            .then(() => this.subscriptions.splice(index, 1))
+        })
     }
 
     reconnect() {
@@ -67,23 +66,22 @@ class EventSub {
         this.connect()
     }
 
-    async onWelcome(message) {
+    onWelcome(message) {
         this.sessionId = message.payload.session.id
         this.keepaliveTimer = message.payload.session.keepalive_timeout_seconds + 1
         this.initiateTimer(message)
-        await this.api.call('/users')
-        .then(response => this.parseResponse(response))
+        this.api.call('/users')
         .then(content => {
             this.broadcasterId = content.data[0].id
+            this.subscriptionTo('channel.follow')
+            this.subscriptionTo('channel.subscribe')
+            this.subscriptionTo('channel.subscription.gift')
+            this.subscriptionTo('channel.subscription.message')
+            this.subscriptionTo('channel.cheer')
+            this.subscriptionTo('channel.raid')
+            this.subscriptionTo('channel.channel_points_custom_reward_redemption.add')
+            this.removeOldSubscribtions()
         })
-        this.subscriptionTo('channel.follow')
-        this.subscriptionTo('channel.subscribe')
-        this.subscriptionTo('channel.subscription.gift')
-        this.subscriptionTo('channel.subscription.message')
-        this.subscriptionTo('channel.cheer')
-        this.subscriptionTo('channel.raid')
-        this.subscriptionTo('channel.channel_points_custom_reward_redemption.add')
-        this.removeOldSubscribtions()
     }
 
     onKeepalive(message) {
@@ -164,23 +162,21 @@ class EventSub {
         }).bind(this), this.keepaliveTimer * 1000)
     }
 
-    async removeOldSubscribtions() {
-        await this.api.call('/eventsub/subscriptions')
-        .then(response => this.parseResponse(response))
+    removeOldSubscribtions() {
+        this.api.call('/eventsub/subscriptions')
         .then(content => {
             if (content.data.length > 0) {
                 content.data.forEach(async subscription => {
                     if (subscription.status !== 'enabled') {
-                        await this.api.call('/eventsub/subscriptions?id=' + subscription.id, 'DELETE')
-                        .then(response => this.parseResponse(response))
+                        this.api.call('/eventsub/subscriptions?id=' + subscription.id, 'DELETE')
                     }
                 })
             }
         })
     }
 
-    async subscriptionTo(channel) {
-        await this.api.call('/eventsub/subscriptions', 'POST', JSON.stringify({
+    subscriptionTo(channel) {
+        this.api.call('/eventsub/subscriptions', 'POST', JSON.stringify({
             "type": channel,
             "version": "1",
             "condition": {
@@ -192,23 +188,12 @@ class EventSub {
                 "session_id": this.sessionId
             }
         }))
-        .then(response => this.parseResponse(response))
         .then(content => {
             console.log(`Subscription to "${channel}" done!`, content)
             if (content.data.length > 0) {
-                this.subscriptionId = content.data[0].id
+                this.subscriptions.push(content.data[0].id)
             }
         })
-    }
-
-    parseResponse(response) {
-        if (!response.ok) {
-            console.debug(response)
-            throw new Error(`HTTP error! Status: ${response.status}`)
-        }
-        if (response.status !== 204) {
-            return response.json()
-        }
     }
 }
 
