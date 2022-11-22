@@ -1,4 +1,4 @@
-# TrAsKiN Stream Alert
+# TrAsKiN Stream Alerts
 
 ## Features
 
