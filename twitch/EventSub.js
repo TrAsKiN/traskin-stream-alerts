@@ -1,6 +1,6 @@
 'use_strict'
 
-class EventSub {
+class EventSub extends EventTarget {
     socket = null
     url = 'wss://eventsub-beta.wss.twitch.tv/ws'
     sessionId = null
@@ -11,6 +11,7 @@ class EventSub {
     subscriptions = []
 
     constructor(api) {
+        super()
         this.api = api
     }
 
@@ -26,23 +27,55 @@ class EventSub {
             let data = JSON.parse(event.data)
             switch (data.metadata.message_type) {
                 case 'session_welcome':
-                    this.onWelcome(data)
+                    this.sessionId = data.payload.session.id
+                    this.keepaliveTimer = data.payload.session.keepalive_timeout_seconds + 1
+                    this.initiateTimer(data)
+                    this.api.call('/users')
+                    .then(content => {
+                        this.broadcasterId = content.data[0].id
+                        this.subscriptionTo('channel.follow')
+                        this.subscriptionTo('channel.subscribe')
+                        this.subscriptionTo('channel.subscription.gift')
+                        this.subscriptionTo('channel.subscription.message')
+                        this.subscriptionTo('channel.cheer')
+                        this.subscriptionTo('channel.raid')
+                        this.subscriptionTo('channel.channel_points_custom_reward_redemption.add')
+                        this.removeOldSubscribtions()
+                    })
                     break
                 case 'session_keepalive':
-                    this.onKeepalive(data)
-                    break
-                case 'session_keepalive':
-                    this.onKeepalive(data)
-                    break
-                case 'session_reconnect':
-                    this.onReconnect(data)
-                    break
-                case 'revocation':
-                    this.onRevocation(data)
+                    console.debug(`Connection still active...`, data)
+                    this.initiateTimer(data)
                     break
                 case 'notification':
-                    this.onNotification(data)
+                    console.log(`New notification!`, data)
+                    this.initiateTimer(data)
+                    switch (data.metadata.subscription_type) {
+                        case 'channel.follow':
+                            this.dispatchEvent(new CustomEvent('follow', {detail: data.payload.event}))
+                            break
+                        case 'channel.subscribe':
+                            this.dispatchEvent(new CustomEvent('sub', {detail: data.payload.event}))
+                            break
+                        case 'channel.subscription.gift':
+                            this.dispatchEvent(new CustomEvent('subgift', {detail: data.payload.event}))
+                            break
+                        case 'channel.subscription.message':
+                            this.dispatchEvent(new CustomEvent('resub', {detail: data.payload.event}))
+                            break
+                        case 'channel.cheer':
+                            this.dispatchEvent(new CustomEvent('cheer', {detail: data.payload.event}))
+                            break
+                        case 'channel.raid':
+                            this.dispatchEvent(new CustomEvent('raid', {detail: data.payload.event}))
+                            break
+                        case 'channel.channel_points_custom_reward_redemption.add':
+                            this.dispatchEvent(new CustomEvent('channelpoints', {detail: data.payload.event}))
+                            break
+                    }
                     break
+                default:
+                    console.log(data)
             }
         }
     }
@@ -64,84 +97,6 @@ class EventSub {
         console.log(`Reconnection...`)
         this.disconnect()
         this.connect()
-    }
-
-    onWelcome(message) {
-        this.sessionId = message.payload.session.id
-        this.keepaliveTimer = message.payload.session.keepalive_timeout_seconds + 1
-        this.initiateTimer(message)
-        this.api.call('/users')
-        .then(content => {
-            this.broadcasterId = content.data[0].id
-            this.subscriptionTo('channel.follow')
-            this.subscriptionTo('channel.subscribe')
-            this.subscriptionTo('channel.subscription.gift')
-            this.subscriptionTo('channel.subscription.message')
-            this.subscriptionTo('channel.cheer')
-            this.subscriptionTo('channel.raid')
-            this.subscriptionTo('channel.channel_points_custom_reward_redemption.add')
-            this.removeOldSubscribtions()
-        })
-    }
-
-    onKeepalive(message) {
-        console.debug(`Connection still active...`, message)
-        this.initiateTimer(message)
-    }
-
-    onPing(message) {
-        console.log(`PING`, message)
-        this.initiateTimer(message)
-    }
-
-    onReconnect(message) {
-        console.log(message)
-    }
-
-    onRevocation(message) {
-        console.log(message)
-    }
-
-    onNotification(message) {
-        console.log(`New notification!`, message)
-        this.initiateTimer(message)
-        switch (message.metadata.subscription_type) {
-            case 'channel.follow':
-                if (typeof this.onfollow === 'function') {
-                    this.onfollow(message.payload.event)
-                }
-                break
-            case 'channel.subscribe':
-                if (typeof this.onsub === 'function') {
-                    this.onsub(message.payload.event)
-                }
-                break
-            case 'channel.subscription.gift':
-                if (typeof this.onsubgift === 'function') {
-                    this.onsubgift(message.payload.event)
-                }
-                break
-            case 'channel.subscription.message':
-                if (typeof this.onresub === 'function') {
-                    this.onresub(message.payload.event)
-                }
-                break
-            case 'channel.cheer':
-                if (typeof this.oncheer === 'function') {
-                    this.oncheer(message.payload.event)
-                }
-                break
-            case 'channel.raid':
-                if (typeof this.onraid === 'function') {
-                    this.onraid(message.payload.event)
-                }
-                break
-            case 'channel.channel_points_custom_reward_redemption.add':
-                if (typeof this.onchannelpoints === 'function') {
-                    this.onchannelpoints(message.payload.event)
-                }
-                break
-        }
     }
 
     initiateTimer(message) {

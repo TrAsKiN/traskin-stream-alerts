@@ -21,6 +21,8 @@ if (dev) {
         "grant_type": "user_token",
         "user_id": users[0].id,
         "scope": [
+            'chat:read',
+            'chat:edit',
             'bits:read',
             'channel:read:redemptions',
             'channel:read:subscriptions'
@@ -44,6 +46,8 @@ if (!token) {
         }
     }
     document.querySelector('#connect').setAttribute('href', api.generateAuthUrl([
+        'chat:read',
+        'chat:edit',
         'bits:read',
         'channel:read:redemptions',
         'channel:read:subscriptions'

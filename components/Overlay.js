@@ -13,15 +13,12 @@ class Overlay {
 
     init(alerts, dev = false) {
         this.eventsub.connect(dev)
-        this.eventsub.onfollow = event => {
+        this.eventsub.addEventListener('follow', async event => {
             if (this.storage.get('enableFollowAlerts')) {
-                const lastFollow = this.lastFollow()
-                alerts.followers.queue(event.user_name, lastFollow.total)
+                const lastFollow = await this.lastFollow()
+                alerts.followers.queue(event.detail.user_name, lastFollow.total)
             }
-        }
-        this.eventsub.onsub = event => {
-            console.log(`New sub!`, event)
-        }
+        })
     }
 
     checkDisplay(element, key) {

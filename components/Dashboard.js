@@ -25,7 +25,7 @@ class Dashboard {
         })
     }
 
-    alertLink(element, bootstrap) {
+    alertLink(element) {
         if (this.storage.get('alertLinkDisabled')) {
             this.bootstrap.Alert.getOrCreateInstance(element.parentNode).close()
         } else {

@@ -3,6 +3,7 @@ import { Overlay } from './components/Overlay.js'
 import { Followers } from './components/Followers.js'
 import { Api } from './twitch/Api.js'
 import { EventSub } from './twitch/EventSub.js'
+import { Chat } from './twitch/Chat.js'
 
 const dev = false
 const storage = new LocalStorage()
@@ -41,4 +42,7 @@ if (token) {
     overlay.init({
         followers: new Followers(follows.data[0].from_name, follows.total, storage)
     })
+    const nickname = (await api.call('/users')).data[0].login
+    const chat = new Chat(api, token, nickname)
+    chat.connect(nickname)
 }
