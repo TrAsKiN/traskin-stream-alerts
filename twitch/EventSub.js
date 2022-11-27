@@ -112,7 +112,7 @@ class EventSub extends EventTarget {
             if (elapsedTime > (this.keepaliveTimer * 1000)) {
                 this.reconnect()
             } else {
-                this.initiateTimer()
+                this.initiateTimer(message)
             }
         }).bind(this), this.keepaliveTimer * 1000)
     }
