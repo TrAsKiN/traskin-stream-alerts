@@ -87,7 +87,7 @@ class EventSub extends EventTarget {
         this.sessionId = null
         this.keepaliveTimer = null
         this.lastMessageTimestamp = null
-        this.subscriptions.forEach(subscriptionId, index => {
+        this.subscriptions.forEach((subscriptionId, index) => {
             this.api.call('/eventsub/subscriptions?id=' + subscriptionId, 'DELETE')
             .then(() => this.subscriptions.splice(index, 1))
         })
