@@ -51,6 +51,13 @@ class Chat extends EventTarget {
                             rawData: data
                         }}))
                         break
+                    case 'PART':
+                        console.log(`${data.source.nick} has left the chat!`)
+                        this.dispatchEvent(new CustomEvent('left', {detail: {
+                            username: data.source.nick,
+                            rawData: data
+                        }}))
+                        break
                 }
             }
         }
