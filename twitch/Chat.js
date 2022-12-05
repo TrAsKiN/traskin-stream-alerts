@@ -2,7 +2,7 @@
 
 class Chat extends EventTarget {
     socket = null
-    url = 'ws://irc-ws.chat.twitch.tv'
+    url = 'wss://irc-ws.chat.twitch.tv'
     channel = null
     token = null
     nickname = null
