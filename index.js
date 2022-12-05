@@ -4,6 +4,14 @@ import { Api } from './twitch/Api.js'
 
 const dev = false
 const storage = new LocalStorage()
+const scopes = [
+    'bits:read',
+    'channel:read:goals',
+    'channel:read:redemptions',
+    'channel:read:subscriptions',
+    'chat:edit',
+    'chat:read',
+]
 let clientId
 let token
 
@@ -20,13 +28,7 @@ if (dev) {
         "client_secret": clients[0].Secret,
         "grant_type": "user_token",
         "user_id": users[0].id,
-        "scope": [
-            'chat:read',
-            'chat:edit',
-            'bits:read',
-            'channel:read:redemptions',
-            'channel:read:subscriptions'
-        ].join("+")
+        "scope": scopes.join("+")
     }).toString()), endpoint.href).href
     token = (await (await fetch(url, {method: 'POST'})).json()).access_token
 } else { 
@@ -45,13 +47,7 @@ if (!token) {
             document.location.reload()
         }
     }
-    document.querySelector('#connect').setAttribute('href', api.generateAuthUrl([
-        'chat:read',
-        'chat:edit',
-        'bits:read',
-        'channel:read:redemptions',
-        'channel:read:subscriptions'
-    ]))
+    document.querySelector('#connect').setAttribute('href', api.generateAuthUrl(scopes))
     document.querySelector('#landing').classList.remove('d-none')
 } else {
     const dashboard = new Dashboard(api, storage, bootstrap)

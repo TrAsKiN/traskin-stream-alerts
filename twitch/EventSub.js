@@ -72,6 +72,15 @@ class EventSub extends EventTarget {
                         case 'channel.channel_points_custom_reward_redemption.add':
                             this.dispatchEvent(new CustomEvent('channelpoints', {detail: data.payload.event}))
                             break
+                        case 'channel.goal.begin':
+                            this.dispatchEvent(new CustomEvent('goal.start', {detail: data.payload.event}))
+                            break
+                        case 'channel.goal.progress':
+                            this.dispatchEvent(new CustomEvent('goal.update', {detail: data.payload.event}))
+                            break
+                        case 'channel.goal.end':
+                            this.dispatchEvent(new CustomEvent('goal.end', {detail: data.payload.event}))
+                            break
                     }
                     break
                 default:
