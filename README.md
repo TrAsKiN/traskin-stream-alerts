@@ -4,9 +4,11 @@
 
 - [x] Follower alert
 - [x] Follower goal
-- [ ] Bits alert
-- [ ] Subscriber alert
-- [ ] Channel point alert
+- [ ] Bits alert (partial)
+- [ ] Sub, resub, gift alert (partial)
+- [ ] Channel point alert (partial)
+- [ ] Raid alert (partial)
+- [ ] Goals (partial)
 
 ## How to add TrAsKiN Stream Alerts in OBS Studio?
 
