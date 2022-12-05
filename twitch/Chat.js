@@ -33,14 +33,14 @@ class Chat extends EventTarget {
             if (data) {
                 switch (data.command.command) {
                     case 'PING':
-                        console.log(`Sending 'PONG :${data.parameters.trim()}'`)
-                        this.socket.send(`PONG :${data.parameters.trim()}`)
+                        console.log(`Sending 'PONG :${data.parameters}'`)
+                        this.socket.send(`PONG :${data.parameters}`)
                         break
                     case 'PRIVMSG':
                         console.log(`New chat message!`, data)
                         this.dispatchEvent(new CustomEvent('message', {detail: {
                             username: data.tags['display-name'],
-                            content: data.parameters.trim(),
+                            content: data.parameters,
                             rawData: data
                         }}))
                         break
@@ -114,7 +114,7 @@ class Chat extends EventTarget {
 
             parsedMessage.source = this.parseSource(rawSourceComponent)
 
-            parsedMessage.parameters = rawParametersComponent
+            parsedMessage.parameters = rawParametersComponent ? rawParametersComponent.trim() : rawParametersComponent
             if (rawParametersComponent && rawParametersComponent[0] === '!') {
                 parsedMessage.command = this.parseParameters(rawParametersComponent, parsedMessage.command)
             }
