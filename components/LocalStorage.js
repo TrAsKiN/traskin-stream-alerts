@@ -1,6 +1,6 @@
 'use strict'
 
-class LocalStorage {
+export class LocalStorage {
     constructor() {
         if (window.localStorage.getItem('accessToken')) {
             this.accessToken = JSON.parse(window.localStorage.getItem('accessToken'))
@@ -60,5 +60,3 @@ class LocalStorage {
         }
     }
 }
-
-export { LocalStorage }

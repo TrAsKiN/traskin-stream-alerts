@@ -1,9 +1,7 @@
 import { LocalStorage } from './components/LocalStorage.js'
 import { Overlay } from './components/Overlay.js'
 import { Followers } from './components/Followers.js'
-import { Api } from './twitch/Api.js'
-import { EventSub } from './twitch/EventSub.js'
-import { Chat } from './twitch/Chat.js'
+import { Api, Chat, EventSub } from './node_modules/@traskin/twitch-tools-js/twitch-tools.js'
 
 const dev = false
 const storage = new LocalStorage()
@@ -41,12 +39,12 @@ if (dev) {
 
 if (token) {
     const api = new Api(clientId, token, dev)
-    const overlay = new Overlay(api, new EventSub(api), storage)
+    const overlay = new Overlay(api, new EventSub(clientId, token, dev), storage)
     const follows = await overlay.lastFollow()
     overlay.init({
         followers: new Followers(follows.data[0].from_name, follows.total, storage)
     })
     const nickname = (await api.call('/users')).data[0].login
-    const chat = new Chat(api, token, nickname)
+    const chat = new Chat(token, nickname)
     chat.connect(nickname)
 }

@@ -1,0 +1,7 @@
+{
+  "name": "traskin-stream-alerts",
+  "version": "1.0.0",
+  "dependencies": {
+    "@traskin/twitch-tools-js": "^1.0.0"
+  }
+}

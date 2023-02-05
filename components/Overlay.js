@@ -1,6 +1,6 @@
 'use strict'
 
-class Overlay {
+export class Overlay {
     constructor(api, eventsub, storage) {
         this.api = api
         this.eventsub = eventsub
@@ -34,5 +34,3 @@ class Overlay {
         return await this.api.call(`/users/follows?first=1&to_id=${user.data[0].id}`)
     }
 }
-
-export { Overlay }

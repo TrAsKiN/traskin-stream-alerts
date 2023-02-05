@@ -1,6 +1,6 @@
 'use strict'
 
-class Followers {
+export class Followers {
     lastFollower
     lastFollowerName
     newFollower
@@ -98,5 +98,3 @@ class Followers {
         }
     }
 }
-
-export { Followers }

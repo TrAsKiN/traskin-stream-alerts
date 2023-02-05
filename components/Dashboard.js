@@ -1,6 +1,6 @@
 'use strict'
 
-class Dashboard {
+export class Dashboard {
     constructor(api, storage, bootstrap) {
         this.api = api
         this.storage = storage
@@ -37,5 +37,3 @@ class Dashboard {
         }
     }
 }
-
-export { Dashboard }

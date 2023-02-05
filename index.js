@@ -1,6 +1,6 @@
 import { LocalStorage } from './components/LocalStorage.js'
 import { Dashboard } from './components/Dashboard.js'
-import { Api } from './twitch/Api.js'
+import { Api } from './node_modules/@traskin/twitch-tools-js/twitch-tools.js'
 
 const dev = false
 const storage = new LocalStorage()
