@@ -1,17 +1,13 @@
 import { LocalStorage } from './components/LocalStorage.js'
 import { Dashboard } from './components/Dashboard.js'
-import { Api } from './node_modules/@traskin/twitch-tools-js/twitch-tools.js'
+import { Api, Chat, EventSub } from './node_modules/@traskin/twitch-tools-js/twitch-tools.js'
 
 const dev = false
 const storage = new LocalStorage()
-const scopes = [
-    'bits:read',
-    'channel:read:goals',
-    'channel:read:redemptions',
-    'channel:read:subscriptions',
-    'chat:edit',
-    'chat:read',
-]
+const scopes = [... new Set([
+    ... Chat.getScopes(),
+    ... EventSub.getScopes()
+])]
 let clientId
 let token
 
@@ -36,7 +32,7 @@ if (dev) {
     token = storage.get('accessToken')
 }
 
-const api = new Api(clientId, token, dev)
+const api = new Api(clientId, token)
 
 if (!token) {
     if (document.location.hash) {
@@ -47,7 +43,7 @@ if (!token) {
             document.location.reload()
         }
     }
-    document.querySelector('#connect').setAttribute('href', api.generateAuthUrl(scopes))
+    document.querySelector('#connect').setAttribute('href', Api.generateAuthUrl(clientId, scopes))
     document.querySelector('#landing').classList.remove('d-none')
 } else {
     const dashboard = new Dashboard(api, storage, bootstrap)

@@ -5,14 +5,10 @@ import { Api, Chat, EventSub } from './node_modules/@traskin/twitch-tools-js/twi
 
 const dev = false
 const storage = new LocalStorage()
-const scopes = [
-    'bits:read',
-    'channel:read:goals',
-    'channel:read:redemptions',
-    'channel:read:subscriptions',
-    'chat:edit',
-    'chat:read',
-]
+const scopes = [... new Set([
+    ... Chat.getScopes(),
+    ... EventSub.getScopes()
+])]
 let clientId
 let token
 
@@ -38,13 +34,13 @@ if (dev) {
 }
 
 if (token) {
-    const api = new Api(clientId, token, dev)
-    const overlay = new Overlay(api, new EventSub(clientId, token, dev), storage)
+    const api = new Api(clientId, token)
+    const overlay = new Overlay(api, new EventSub(clientId, token), storage)
     const follows = await overlay.lastFollow()
     overlay.init({
         followers: new Followers(follows.data[0].from_name, follows.total, storage)
     })
     const nickname = (await api.call('/users')).data[0].login
-    const chat = new Chat(token, nickname)
+    const chat = new Chat(clientId, token)
     chat.connect(nickname)
 }
