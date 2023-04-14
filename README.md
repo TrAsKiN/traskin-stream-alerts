@@ -1,38 +1,27 @@
-# TrAsKiN Stream Alerts
+# TraskinStreamAlerts
 
-## Features
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.6.
 
-- [x] Follower alert
-- [x] Follower goal
-- [x] Chat
-- [ ] Bits alert (partial)
-- [ ] Sub, resub, gift alert (partial)
-- [ ] Channel point alert (partial)
-- [ ] Raid alert (partial)
-- [ ] Goals (partial)
+## Development server
 
-## How to add TrAsKiN Stream Alerts in OBS Studio?
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-### Add the dashboard
+## Code scaffolding
 
-- In the *OBS Studio* menu **View** then **Docks**, click on **Custom Browser Docks...**.
-- In the **Dock Name** column enter `Dashboard`
-- In the **URL** column enter **https://traskin.github.io/traskin-stream-alerts/**
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-A window appears in which you can log in. You can anchor this window anywhere in OBS Studio.
+## Build
 
-### Add alerts display
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-- Add a **browser source** in the *scene* where you want to add the alerts
-- In the **URL** field use the following address: **https://traskin.github.io/traskin-stream-alerts/overlay.html**
-- Set the **width** and **height** of the source to match your *screen resolution*
+## Running unit tests
 
-It is normal that you still do not see the alerts display if you have not logged in.
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-### Add chat display
+## Running end-to-end tests
 
-- Add a **browser source** in the *scene* where you want to add the chat
-- In the **URL** field use the following address: **https://traskin.github.io/traskin-stream-alerts/chat.html**
-- Set the **width** and **height** of the source
+Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-It is normal that you still do not see the chat display if you have not logged in.
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
