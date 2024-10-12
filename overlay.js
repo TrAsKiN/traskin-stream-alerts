@@ -6,8 +6,8 @@ import { Api, Chat, EventSub } from './node_modules/@traskin/twitch-tools-js/twi
 const dev = false
 const storage = new LocalStorage()
 const scopes = [... new Set([
-    ... Chat.scopes,
-    ... EventSub.scopes
+    ... Chat.scopes.entries(),
+    ... EventSub.scopes.entries()
 ])]
 let clientId
 let token
